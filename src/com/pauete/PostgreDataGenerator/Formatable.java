@@ -1,5 +1,5 @@
-package com.pauete.Lienzo;
+package com.pauete.PostgreDataGenerator;
 
 public interface Formatable {
-    public String format();
+    String format();
 }

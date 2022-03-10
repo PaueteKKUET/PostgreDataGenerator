@@ -1,10 +1,10 @@
-package com.pauete.Lienzo;
+package com.pauete.PostgreDataGenerator;
 
 public class Constraint implements Formatable {
 
     private final ConstraintType type;
     private final String constraintName;
-    private String referredColumn;
+    private final String referredColumn;
 
     private Constraint(ConstraintType type, String constraintName, String referredColumn) {
         this.type = type;

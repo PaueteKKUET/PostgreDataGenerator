@@ -1,6 +1,4 @@
-package com.pauete.Lienzo;
-
-import javax.xml.crypto.Data;
+package com.pauete.PostgreDataGenerator;
 
 public abstract class DataType {
 
@@ -26,6 +24,7 @@ public abstract class DataType {
     public String format() {
         return this.getClass().getSimpleName();
     }
+    public abstract String defaultString();
 
 
 
@@ -47,6 +46,11 @@ public abstract class DataType {
         public String format() {
             return super.format() + "(" + this.length + ")";
         }
+
+        @Override
+        public String defaultString() {
+            return "'%name%'";
+        }
     }
 
     private static class Serial extends DataType {
@@ -55,6 +59,11 @@ public abstract class DataType {
         private static DataType get() {
             return SERIAL;
         }
+
+        @Override
+        public String defaultString() {
+            return "DEFAULT";
+        }
     }
 
     private static class Date extends DataType {
@@ -62,6 +71,11 @@ public abstract class DataType {
 
         private static DataType get() {
             return DATE;
+        }
+
+        @Override
+        public String defaultString() {
+            return "'2000-01-31' <%name%>";
         }
     }
 
@@ -82,6 +96,11 @@ public abstract class DataType {
         public String format() {
             return super.format() + "(" + this.numbers[0] + (this.numbers[1] == 0 ? "" : "," + this.numbers[1]) + ")";
         }
+
+        @Override
+        public String defaultString() {
+            return 0 + (this.numbers[1] == 0 ? "" : ".0") + " <%name%>";
+        }
     }
 
     private static class Integer extends DataType {
@@ -89,6 +108,11 @@ public abstract class DataType {
 
         private static DataType get() {
             return INTEGER;
+        }
+
+        @Override
+        public String defaultString() {
+            return "0 <%name%>";
         }
     }
 

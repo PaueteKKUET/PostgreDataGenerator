@@ -1,9 +1,8 @@
-package com.pauete.Lienzo;
+package com.pauete.PostgreDataGenerator;
 
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.StringTokenizer;
 
 public class DMLReader {
@@ -48,9 +47,7 @@ public class DMLReader {
             }
 
             switch (action) {
-                case CREATE_TABLE -> {
-                    this.database.addTable(createTable(token));
-                }
+                case CREATE_TABLE -> this.database.addTable(createTable(token));
             }
         }
 
@@ -137,9 +134,7 @@ public class DMLReader {
 
                 // Construimos la constraint de una u otra forma según el tipo
                 switch (keyType) {
-                    case PK -> {
-                        constraints.addConstraint(Constraint.primaryKey(constraintName, statement));
-                    }
+                    case PK -> constraints.addConstraint(Constraint.primaryKey(constraintName, statement));
                     case FK -> {
                         String referredcolumn = statement.replaceFirst("\\(", "").replaceFirst("\\).*", "").trim();
                         statement = statement.replaceFirst(".*references","").trim();
@@ -148,12 +143,9 @@ public class DMLReader {
 
                         constraints.addConstraint(Constraint.foreignKey(constraintName, referredcolumn, targetTable, targetColumn));
                     }
-                    case UK -> {
-                        constraints.addConstraint(Constraint.uniqueKey(constraintName, statement));
-                    }
-                    case CHECK -> {
-                        constraints.addConstraint(Constraint.check(constraintName, statement));
-                    }
+                    case UK -> constraints.addConstraint(Constraint.uniqueKey(constraintName, statement));
+                    case CHECK -> constraints.addConstraint(Constraint.check(constraintName, statement));
+                    default -> throw new IllegalStateException("Unexpected value: " + keyType);
                 }
             }
         }
@@ -169,6 +161,9 @@ public class DMLReader {
             if (isConstraint(statement)) {
                 continue;
             }
+
+            //Descartamos la cláusula default ya que no la necesitaremos nunca.
+            statement = statement.replaceAll("default .* ", "AAAAAAAAAAA");
 
             // Nombre de la columna
             String columnName = statement.substring(0, statement.indexOf(" "));
@@ -186,8 +181,8 @@ public class DMLReader {
             String dataName = statement.replaceFirst("\\(.*", "");
             statement = statement
                     .replaceAll(dataName, "")
-                    .replaceFirst("\\(", "")
-                    .replaceFirst("\\)", "")
+                    .replaceFirst(".*\\(", "")
+                    .replaceFirst("\\).*", "")
                     .trim();
 
             DataType dataType = null;
@@ -211,6 +206,9 @@ public class DMLReader {
                 case "INTEGER" -> dataType = DataType.INTEGER();
             }
 
+            if (dataType == null) {
+                throw new IllegalStateException();
+            }
             tabla.addColumn(new Column(columnName, dataType, isNotNull));
         }
 

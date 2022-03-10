@@ -1,4 +1,4 @@
-package com.pauete.Lienzo;
+package com.pauete.PostgreDataGenerator;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -37,14 +37,22 @@ public class Table {
         }
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public ArrayList<Column> getColumns() {
+        return this.columns;
+    }
+
     /**
      * Helper to create a table.
      */
     public static class Builder {
 
         private String name;
-        private ArrayList<Column> columns;
-        private ConstraintSet constraints;
+        private final ArrayList<Column> columns;
+        private final ConstraintSet constraints;
 
         /**
          * Creates a table builder.
@@ -73,7 +81,7 @@ public class Table {
             if (name.equals("")) {
                 throw new IllegalArgumentException("The name can not be empty");
             }
-            this.name = name;
+            this.name = name.toUpperCase();
             return this;
         }
 

@@ -1,4 +1,4 @@
-package com.pauete.Lienzo;
+package com.pauete.PostgreDataGenerator;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,9 +19,8 @@ public class ConstraintSet implements Iterable<Constraint>, Iterator<Constraint>
         return this.constraints.size() == 0;
     }
 
-    public ConstraintSet addConstraint(@NotNull Constraint ctr) {
+    public void addConstraint(@NotNull Constraint ctr) {
         this.constraints.add(ctr);
-        return this;
     }
 
     public boolean hasPublicKey() {

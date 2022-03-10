@@ -1,4 +1,4 @@
-package com.pauete.Lienzo;
+package com.pauete.PostgreDataGenerator;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +26,7 @@ public class Column {
         return this.name;
     }
 
-    @NotNull public boolean isNotNull() {
+    public boolean isNotNull() {
         return this.notNull;
     }
 

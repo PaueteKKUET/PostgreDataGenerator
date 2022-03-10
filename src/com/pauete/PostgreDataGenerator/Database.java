@@ -1,12 +1,12 @@
-package com.pauete.Lienzo;
+package com.pauete.PostgreDataGenerator;
 
-import com.pauete.Lienzo.Table;
+import com.pauete.PostgreDataGenerator.Exceptions.NoSuchTableException;
 
 import java.util.ArrayList;
 
 public class Database {
 
-    private ArrayList<Table> tables;
+    private final ArrayList<Table> tables;
 
     public Database() {
         tables = new ArrayList<>();
@@ -24,6 +24,19 @@ public class Database {
         for (Table table : tables) {
             table.debug();
         }
+    }
+
+    public Table getTableByName(String name) throws NoSuchTableException {
+        for (Table table : tables) {
+            if (table.getName().equals(name.toUpperCase())) {
+                return table;
+            }
+        }
+        throw new NoSuchTableException();
+    }
+
+    public ArrayList<Table> getTables() {
+        return this.tables;
     }
 
 }
